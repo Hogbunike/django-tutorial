@@ -1,0 +1,22 @@
+import calendar
+
+from django.shortcuts import render
+import calendar
+from calendar import HTMLCalendar
+from datetime import datetime
+
+def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
+    name = "Henry"
+    month = month.title()
+    month_num = list(calendar.month_name).index(month)
+    month_num = int(month_num)
+
+    cal = HTMLCalendar().formatmonth(year, month_num)
+    return render(request, "events/home.html", {
+        "name": name,
+        "age": 26,
+        "year": year,
+        "month": month,
+        "month_num": month_num,
+        "cal": cal
+    })
