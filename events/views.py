@@ -4,6 +4,11 @@ from django.shortcuts import render
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
+from .models import Events
+
+def all_events(request):
+    event_list = Events.objects.all()
+    return render(request, 'events/events_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
     name = "Henry"

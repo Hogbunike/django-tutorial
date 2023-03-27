@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+  {% extends 'events/base.html' %}
+
+    {% block content %}
+
+         <h1>Events</h1>
+            <br>
+
+    {% for event in event_list %}
+        <strong>{{ event}}</strong>
+    <ul>
+        <li>Date: {{ event.event_date }}</li>
+        <li>Venue: {{ event.venue }}</li>
+        <li>Manager: {{ event.manager }}</li>
+        <li>Description: {{ event.description }}</li>
+        <li>Attendees:
+        {% for user in event.attendees.all %}
+            {{ user }}
+        {% endfor %}
+        </li>
+
+    </ul>
+    <br>
+    {% endfor %}
+    {% endblock %}
+
+</body>
+</html>
