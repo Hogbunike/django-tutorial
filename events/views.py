@@ -1,10 +1,14 @@
-import calendar
-
 from django.shortcuts import render
 import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Events
+from .forms import VenueForm
+
+def add_venue(request):
+    form = VenueForm
+    return render(request, 'events/add_venue.html', {'form':form})
+
 
 def all_events(request):
     event_list = Events.objects.all()
