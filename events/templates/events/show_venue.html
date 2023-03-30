@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Show venue</title>
+</head>
+<body>
+    {% extends 'events/base.html' %}
+
+    {% block content %}
+
+        <center>
+        <h1>{{ venue }}</h1>
+            <br>
+        <h3>Venue: {{ venue.name }}</h3><br>
+        <h3>Address: {{ venue.address }}</h3><br>
+        <h3>Contact Phone: {{ venue.phone }}</h3><br>
+            <h3>Email: <a href="{{ venue.email_address }}">{{ venue.email_address }}</a></h3><br>
+
+    </center>
+    {% endblock %}
+
+</body>
+</html>

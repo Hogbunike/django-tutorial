@@ -11,13 +11,20 @@
 <center>
     <h1>Add Venue to Database</h1>
     <br>
-    <form action="" method=POST>
-        {% csrf_token %}
+    {% if submitted %}
+        Your Venue was submitted successfully!!!
 
-        {{ form.as_p }}
+    {% else %}
 
-        <input type="submit" value="Submit" class="btn btn-secondary">
-    </form>
+
+        <form action="" method=POST>
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Submit" class="btn btn-secondary">
+        </form>
+    {% endif %}
 
 </center>
     {% endblock %}
