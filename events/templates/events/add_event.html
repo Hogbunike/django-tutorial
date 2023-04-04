@@ -5,6 +5,30 @@
     <title>Title</title>
 </head>
 <body>
+    {% extends 'events/base.html' %}
+
+    {% block content %}
+<center>
+    <h1>Add Event to Database</h1>
+    </center>
+    <br>
+    {% if submitted %}
+        Your Event was submitted successfully!!!
+
+    {% else %}
+
+
+        <form action="" method=POST>
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Submit" class="btn btn-secondary">
+        </form>
+    {% endif %}
+
+
+    {% endblock %}
 
 </body>
 </html>

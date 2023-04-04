@@ -6,10 +6,19 @@ from .models import Events, Venue
 from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 
+def update_event(request, event_id):
+    event = Events.objects.get(pk=event_id)
+    form = EventForm(request.POST or None, instance=Events)
+    if form.is_valid():
+        form.save()
+        return redirect('event-list')
+    return render(request, 'events/update_event.html', {'event': event, 'form': form})
+
+
 def add_event(request):
     submitted = False
     if request.method == "POST":
-        form = VenueForm(request.POST)
+        form = EventForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/add_event?submitted=True')
