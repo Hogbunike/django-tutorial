@@ -6,6 +6,14 @@ from .models import Events, Venue
 from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 
+# delete an event
+
+def delete_event(request, event_id):
+    event = Events.objects.get(pk=event_id)
+    event.delete()
+    return redirect('event-list', request)
+
+
 def update_event(request, event_id):
     event = Events.objects.get(pk=event_id)
     form = EventForm(request.POST or None, instance=Events)
@@ -67,7 +75,6 @@ def add_venue(request):
         form = VenueForm
         if 'submitted' in request.GET:
             submitted = True
-
 
     return render(request, 'events/add_venue.html', {'form':form, 'submitted': submitted})
 
