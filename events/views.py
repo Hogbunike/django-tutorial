@@ -6,12 +6,18 @@ from .models import Events, Venue
 from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 
-# delete an event
+# delete a venue
+def delete_venue(venue_id):
+    venue = Venue.objects.get(pk=venue_id)
+    venue.delete()
+    return redirect('venue-list')
 
-def delete_event(request, event_id):
+
+# delete an event
+def delete_event(event_id):
     event = Events.objects.get(pk=event_id)
     event.delete()
-    return redirect('event-list', request)
+    return redirect('event_list')
 
 
 def update_event(request, event_id):
@@ -19,7 +25,7 @@ def update_event(request, event_id):
     form = EventForm(request.POST or None, instance=Events)
     if form.is_valid():
         form.save()
-        return redirect('event-list')
+        return redirect('event_list')
     return render(request, 'events/update_event.html', {'event': event, 'form': form})
 
 
@@ -80,7 +86,7 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Events.objects.all()
+    event_list = Events.objects.all().order_by('name')
     return render(request, 'events/events_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
