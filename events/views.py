@@ -7,14 +7,14 @@ from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 
 # delete a venue
-def delete_venue(venue_id):
+def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue.delete()
     return redirect('venue-list')
 
 
 # delete an event
-def delete_event(event_id):
+def delete_event(request, event_id):
     event = Events.objects.get(pk=event_id)
     event.delete()
     return redirect('event_list')
