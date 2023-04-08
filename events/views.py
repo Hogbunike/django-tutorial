@@ -66,7 +66,7 @@ def show_venue(request, venue_id):
     return render(request, 'events/show_venue.html', {'venue': venue})
 
 def all_venues(request):
-    venues_list = Venue.objects.all()
+    venues_list = Venue.objects.all().order_by('-name')
     return render(request, 'events/venues.html', {'venues_list': venues_list})
 
 
@@ -86,7 +86,7 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Events.objects.all().order_by('name')
+    event_list = Events.objects.all().order_by('event_date')
     return render(request, 'events/events_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
