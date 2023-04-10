@@ -5,12 +5,85 @@ from datetime import datetime
 from .models import Events, Venue
 from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+import csv
+
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+# Generate a PDF file venue list
+def venue_pdf(request):
+    #     Create a bytestream buffer
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    # create a text object
+    textob =c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 14)
+
+    # designate the model
+    venues = Venue.objects.all()
+    lines = []
+    #     Loop through
+    for venue in venues:
+        lines.append(venue.name)
+        lines.append(venue.address)
+        lines.append(venue.phone)
+        lines.append(venue.email_address)
+        lines.append(" ")
+    for line in lines:
+        textob.textLine(line)
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename="venue.pdf")
+
+
+def venue_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=venues.csv'
+    # create a csv writer
+    writer = csv.writer(response)
+
+    # Designate the model
+    venues = Venue.objects.all()
+
+    # add column headings to the csv file
+    writer.writerow(['Venue Name', 'Address', 'Phone Number', 'Email Address'])
+
+    # Loop Through venues and output
+    for venue in venues:
+       writer.writerow([venue.name, venue.address, venue.phone, venue.email_address])
+
+    return response
+
+
+
+# Generate Text file venue list
+def venue_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=venues.txt'
+    # Designate the model
+    venues = Venue.objects.all()
+    lines = []
+
+    # Loop Through venues and output
+    for venue in venues:
+        lines.append(f'{venue.name}\n\n {venue.address}\n\n {venue.phone}\n\n {venue.email_address}\n\n')
+
+    response.writelines(lines)
+    return response
 
 # delete a venue
 def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue.delete()
-    return redirect('venue-list')
+    return redirect('venue_list')
 
 
 # delete an event
