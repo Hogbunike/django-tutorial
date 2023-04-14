@@ -14,6 +14,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Events
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link active" aria-current="page" href="{% url 'event_list' %}">All Events</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+
           <a class="nav-link active" aria-current="page" href="{% url 'event_list' %}">Events</a>
         </li>
          <li class="nav-item">
@@ -25,15 +37,17 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'venue-list' %}">Venues</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'venue_text' %}">Venue Text File</a>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Downloads
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'venue_text' %}">Venue Text File</a></li>
+            <li><a class="dropdown-item" href="{% url 'venue_csv' %}">Venue CSV File</a></li>
+            <li><a class="dropdown-item" href="{% url 'venue_pdf' %}">Venue PDF File</a></li>
+          </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'venue_csv' %}">Venue CSV File</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'venue_pdf' %}">Venue PDF File</a>
-        </li>
+
         {% if user.is_authenticated %}
            <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
