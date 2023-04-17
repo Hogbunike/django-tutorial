@@ -24,7 +24,6 @@
             <li><a class="dropdown-item" aria-current="page" href="{% url 'event_list' %}">All Events</a></li>
             <li><a class="dropdown-item" aria-current="page" href="{% url 'add-event' %}">Add Events</a></li>
 
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,15 +32,11 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="{% url 'venue-list' %}">All Venues</a></li>
             <li><a class="dropdown-item" href="{% url 'add-venue' %}">Add Venue</a></li>
+          </ul>
 
 
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'add-venue' %}">Add Venue</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'venue-list' %}">Venues</a>
-        </li>
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Downloads
@@ -66,6 +61,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
+
         {% endif %}
 
       <form class="d-flex" method="POST" action="{% url 'search_venues' %}">
