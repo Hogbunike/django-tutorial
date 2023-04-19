@@ -8,6 +8,7 @@
     {% extends 'events/base.html' %}
 
     {% block content %}
+    {% if user.is_authenticated %}
 <center>
     <h1>Add Event to Database</h1>
     </center>
@@ -27,7 +28,10 @@
         </form>
     {% endif %}
 
-
+    {% else %}
+    <h1>Sorry you must be logged in to view this page</h1>
+    <a href="{% url 'login' %}">Login Here</a>
+    {% endif %}
     {% endblock %}
 
 </body>
