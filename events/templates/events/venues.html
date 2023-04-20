@@ -13,6 +13,7 @@
 
     {% for venue in venues %}
         <tr>
+            {% if user.is_authenticated %}
             <td>
                 <a href="{% url 'show-venue' venue.id %}">{{ venue }}</a>
             </td>
@@ -20,6 +21,7 @@
                 <a href="{% url 'update_venue' venue.id %}" class="btn btn-outline-secondary btn-sn">Update</a>
                 <a href="{% url 'delete-venue' venue.id %}" class="btn btn-outline-danger btn-sn">Delete</a>
             </td>
+            {% endif %}
         </tr>
     {% endfor %}
     </table>
