@@ -34,7 +34,7 @@
     <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
     <li class="page-item"><a class="page-link" href="?page={{ venues.previous_page_number }}">Previous</a></li>
 
-    {% end if %}
+    {% endif %} 
 
     <!--<li class="page-item"><a href="#" class="page-link"> Page {{ venues.number }} of {{ venues.paginator.num_pages }}</a></li>-->
 
@@ -44,7 +44,7 @@
     {% if venues.has_next %}
     <li class="page-item"><a class="page-link" href="?page={{ venues.next_page_number }}">Next</a></li>
     <li class="page-item"><a class="page-link" href="?page={{ venues.paginator.num_pages }}">Last &raquo;</a></li>
-    {% end if %}
+    {% endif %}
      </ul>
     </nav>
     {% endblock %}
