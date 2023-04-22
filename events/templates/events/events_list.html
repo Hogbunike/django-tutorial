@@ -12,11 +12,12 @@
          <h1>Events</h1>
             <br>
 
-    {% for event in event_list %}
-  <div class="card">
-      <div class="card-header">
+  {% for event in event_list %}
+    <div class="card">
+        <div class="card-header">
         {{ event}}
-      </div>
+        </div>
+    </div>
       <div class="card-body">
           <h5 class="card-title">Venue: {{ event.venue }}</h5>
           <p class="card-text"></p>
@@ -42,7 +43,7 @@
         </ul>
         <br>
         {% endif %}
-    {% endif %}
+    {% endfor %}
     {% endblock %}
 
 </body>
