@@ -87,12 +87,16 @@ def venue_text(request):
 def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue.delete()
+<<<<<<< HEAD
     return redirect('venue-list')
+=======
+    return redirect('venue-list') #the url is venue-list not venue_list
+>>>>>>> bf8b7c9c6e3cfeabad5e68785ea255abd35d7687
 
 
 # delete an event
 def delete_event(request, event_id):
-    event = Events.objects.get(pk=event_id)
+    event = Events.objects.get(pk=event_id) 
     event.delete()
     return redirect('event_list')
 
