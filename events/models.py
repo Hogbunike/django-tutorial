@@ -11,8 +11,8 @@ class MyClubUsers(models.Model):
         return self.first_name + ' ' + self.last_name
 
 class Venue(models.Model):
-    name = models.CharField('Venue name', max_length=120)
-    address = models.CharField('Address', max_length=120,)
+    name = models.CharField('Venue name', max_length=100)
+    address = models.CharField('Address', max_length=150,)
     phone = models.IntegerField('Contact Phone', max_length=15)
     email_address = models.EmailField('Email Address', max_length=25)
 
@@ -20,7 +20,7 @@ class Venue(models.Model):
         return self.name
 
 class Events(models.Model):
-    name = models.CharField('Event name', max_length=120)
+    name = models.CharField('Event name', max_length=100)
     event_date = models.DateTimeField('Event date')
     venue = models.ForeignKey(Venue, blank=True, null=True, on_delete=models.CASCADE)
     # venue = models.CharField(max_length=120)

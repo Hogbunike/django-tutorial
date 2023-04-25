@@ -11,16 +11,9 @@
 
          <h1>Events</h1>
             <br>
-
-<<<<<<< HEAD
-  {% for event in event_list %}
-    <div class="card">
-        <div class="card-header">
-=======
     {% for event in event_list %}
      <div class="card">
       <div class="card-header">
->>>>>>> bf8b7c9c6e3cfeabad5e68785ea255abd35d7687
         {{ event}}
         </div>
     </div>
@@ -37,6 +30,7 @@
             {{ user }}<br>
         {% endfor %}
         </li>
+        <br>
     </div>
       {% if user.is_authenticated %}
           {% if user == event.manager %}
@@ -48,7 +42,7 @@
       </div>
         </ul>
         <br>
-        {% endif %}
+    {% endif %}
     {% endfor %}
     {% endblock %}
 
