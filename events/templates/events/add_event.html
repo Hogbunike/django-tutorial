@@ -14,7 +14,7 @@
     </center>
     <br>
     {% if submitted %}
-        Your Event was submitted successfully!!!
+        Your Event has been submitted successfully!!!
 
     {% else %}
 
@@ -29,7 +29,7 @@
     {% endif %}
 
     {% else %}
-    <h1>Sorry you must be logged in to view this page</h1>
+    <h1>Sorry you must be logged in to view this page. Login and try again</h1>
     <a href="{% url 'login' %}">Login Here</a>
     {% endif %}
     {% endblock %}
