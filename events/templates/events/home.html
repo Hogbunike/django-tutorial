@@ -8,8 +8,8 @@
 {% extends 'events/base.html' %}
 
     {% block content %}
-<h1>Welcome {{ name }}! </h1>
-<p>Your Events for {{ month }}, {{ year }}</p>
+<h1>Welcome! </h1>
+<p>Your Events for {{ day }} {{ month }}, {{ year }}</p>
 <center> {{ cal|safe}} </center>
     {% endblock %}
 

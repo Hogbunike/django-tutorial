@@ -24,7 +24,7 @@ def venue_pdf(request):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
     # create a text object
-    textob =c.beginText()
+    textob = c.beginText()
     textob.setTextOrigin(inch, inch)
     textob.setFont("Helvetica", 14)
 
@@ -100,7 +100,7 @@ def delete_event(request, event_id):
 
 def update_event(request, event_id):
     event = Events.objects.get(pk=event_id)
-    form = EventForm(request.POST or None, instance=Events)
+    form = EventForm(request.POST or None, instance=event)
     if form.is_valid():
         form.save()
         return redirect('event_list')
@@ -113,14 +113,13 @@ def add_event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
+            # return redirect('event_list')
             return HttpResponseRedirect('/add_event?submitted=True')
     else:
         form = EventForm
         if 'submitted' in request.GET:
             submitted = True
-
-
-    return render(request, 'events/add_event.html', {'form':form, 'submitted': submitted})
+    return render(request, 'events/add_event.html', {'form': form, 'submitted': submitted})
 
 
 def update_venue(request, venue_id):
@@ -153,7 +152,6 @@ def all_venues(request):
     return render(request, 'events/venues.html', {'venues_list': venues_list, 'venues': venues, 'nums': nums})
 
 
-
 def add_venue(request):
     submitted = False
     if request.method == "POST":
@@ -173,16 +171,15 @@ def all_events(request):
     event_list = Events.objects.all().order_by('event_date')
     return render(request, 'events/events_list.html', {'event_list': event_list})
 
-def home(request, year=datetime.now().year, month=datetime.now().strftime("%B")):
-    name = "Henry"
+def home(request, year=datetime.now().year, day=datetime.now().day, month=datetime.now().strftime("%B")):
     month = month.title()
     month_num = list(calendar.month_name).index(month)
     month_num = int(month_num)
 
     cal = HTMLCalendar().formatmonth(year, month_num)
     return render(request, "events/home.html", {
-        "name": name,
         "age": 26,
+        "day": day,
         "year": year,
         "month": month,
         "month_num": month_num,

@@ -15,7 +15,6 @@
         <form action="" method=POST>
             {% csrf_token %}
 
-            <form>
                 <div class="mb-3">
                     <label for="exampleInputEmail" class="form-label">Username</label>
                     <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
@@ -24,9 +23,11 @@
                     <label for="exampleInputPassword1" class="form-label">Password</label>
                     <input type="password" class="form-control" name="password">
                 </div>
-            </form>
 
-            <input type="submit" value="Submit" class="btn btn-secondary">
+            <!-- <input type="submit" value="Submit" class="btn btn-secondary"> -->
+            <div class="form-control">
+                <button class="btn btn-outline-info" type="submit">Login</button>
+            </div>
         </form>
 
 
