@@ -7,6 +7,7 @@ from .forms import VenueForm, EventForm
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 import csv
+
 # imports for pdf
 from django.http import FileResponse
 import io
@@ -20,9 +21,11 @@ from django.core.paginator import Paginator
 
 # Generate a PDF file venue list
 def venue_pdf(request):
+    
     #     Create a bytestream buffer
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    
     # create a text object
     textob = c.beginText()
     textob.setTextOrigin(inch, inch)
@@ -31,6 +34,7 @@ def venue_pdf(request):
     # designate the model
     venues = Venue.objects.all()
     lines = []
+    
     #     Loop through
     for venue in venues:
         lines.append(venue.name)
@@ -51,6 +55,7 @@ def venue_pdf(request):
 def venue_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=venues.csv'
+    
     # create a csv writer
     writer = csv.writer(response)
 
@@ -72,6 +77,7 @@ def venue_csv(request):
 def venue_text(request):
     response = HttpResponse(content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename=venues.txt'
+    
     # Designate the model
     venues = Venue.objects.all()
     lines = []
@@ -88,7 +94,7 @@ def delete_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
     venue.delete()
     return redirect('venue-list')
-    return redirect('venue-list')
+
 
 
 # delete an event
@@ -113,7 +119,6 @@ def add_event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
-            # return redirect('event_list')
             return HttpResponseRedirect('/add_event?submitted=True')
     else:
         form = EventForm
@@ -144,6 +149,7 @@ def show_venue(request, venue_id):
 
 def all_venues(request):
     venues_list = Venue.objects.all()
+    
     # set up pagination
     p = Paginator(Venue.objects.all(), 2)
     page = request.GET.get('page')
