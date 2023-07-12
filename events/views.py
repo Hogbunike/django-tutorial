@@ -3,9 +3,11 @@ import calendar
 from calendar import HTMLCalendar
 from datetime import datetime
 from .models import Events, Venue
-from .forms import VenueForm, EventForm
+from django.contrib.auth.models import User
+from .forms import VenueForm, EventForm, AdminEventForm
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+from django.contrib import messages
 import csv
 
 # imports for pdf
@@ -18,6 +20,14 @@ from reportlab.lib.pagesizes import letter
 # imports for pagination
 from django.core.paginator import Paginator
 
+def my_events(request):
+    if request.user.is_authenticated:
+        events = Events.objects.filter(attendees=request.user.id)
+        return render(request, 'events/my_events.html', {'events': events})
+
+    else:
+        messages.success(request, ("You Aren't Authorized To View This Page"))
+        return redirect('home')
 
 # Generate a PDF file venue list
 def venue_pdf(request):
@@ -99,14 +109,22 @@ def delete_venue(request, venue_id):
 
 # delete an event
 def delete_event(request, event_id):
-    event = Events.objects.get(pk=event_id) 
-    event.delete()
-    return redirect('event_list')
+    event = Events.objects.get(pk=event_id)
+    if request.user == event.manager:
+        event.delete()
+        messages.success(request, ('Event Deleted'))
+        return redirect('event_list')
+    else:
+        messages.success(request, ("You Aren't Authorized To Delete This Event"))
+        return redirect('event_list')
 
 
 def update_event(request, event_id):
     event = Events.objects.get(pk=event_id)
-    form = EventForm(request.POST or None, instance=event)
+    if request.user.is_superuser:
+        form = AdminEventForm(request.POST or None, instance=event)
+    else:
+        form = EventForm(request.POST or None, instance=event)
     if form.is_valid():
         form.save()
         return redirect('event_list')
@@ -116,12 +134,26 @@ def update_event(request, event_id):
 def add_event(request):
     submitted = False
     if request.method == "POST":
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/add_event?submitted=True')
+        if request.user.is_superuser:
+            form = AdminEventForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
+        else:
+            form = EventForm(request.POST)
+            if form.is_valid():
+                event = form.save(commit=False)
+                event.manager = request.user  #logged in user
+                event.save()
+                return HttpResponseRedirect('/add_event?submitted=True')
+            
     else:
-        form = EventForm
+        # just going to the page. Not submitting
+        if request.user.is_superuser:
+            form = AdminEventForm
+        else:
+            form = EventForm
+
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'events/add_event.html', {'form': form, 'submitted': submitted})
@@ -138,14 +170,23 @@ def update_venue(request, venue_id):
 def search_venues(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        venues = Venue.objects.filter(name__contains=searched)
+        venues = Venue.objects.filter(description__contains=searched)
         return render(request, 'events/search_venues.html', {'searched': searched, 'venues': venues})
     else:
         return render(request, 'events/search_venues.html', {})
+    
+def search_events(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        events = Events.objects.filter(name__contains=searched)
+        return render(request, 'events/search_events.html', {'searched': searched, 'events': events})
+    else:
+        return render(request, 'events/search_events.html', {})
 
 def show_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
-    return render(request, 'events/show_venue.html', {'venue': venue})
+    venue_owner = User.objects.get(pk=venue.owner)
+    return render(request, 'events/show_venue.html', {'venue': venue, 'venue_owner': venue_owner})
 
 def all_venues(request):
     venues_list = Venue.objects.all()
@@ -163,7 +204,10 @@ def add_venue(request):
     if request.method == "POST":
         form = VenueForm(request.POST)
         if form.is_valid():
-            form.save()
+            venue = form.save(commit=False)
+            venue.owner = request.user.id  #logged in user
+            venue.save()
+            # form.save()
             return HttpResponseRedirect('/add_venue?submitted=True')
     else:
         form = VenueForm

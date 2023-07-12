@@ -24,7 +24,9 @@
             <li><a class="dropdown-item" aria-current="page" href="{% url 'event_list' %}">All Events</a></li>
              {% if user.is_authenticated %}
             <li><a class="dropdown-item" aria-current="page" href="{% url 'add-event' %}">Add Events</a></li>
+            <li><a class="dropdown-item" aria-current="page" href="{% url 'my_events' %}">My Events</a></li>
             {% endif %}
+            <li><a class="dropdown-item" aria-current="page" href="{% url 'search_events' %}">Search Events</a></li>
 
           </ul>
         <li class="nav-item dropdown">
