@@ -24,11 +24,15 @@
                         <li>Owner: {{ venue_owner }}</li>
                         <li>Owner's Email: {{ venue_owner.email }}</li>
                     </ul>
+                    <br>
+                    {% if venue.venue_img %}
+                        <img src="{{ venue.venue_img.url }}" width="500" alt="">
+                    {% endif %}
                 </p>
             </div>
         </div>
     </div>
-    </center>
+    
     {% endblock %}
 
 </body>

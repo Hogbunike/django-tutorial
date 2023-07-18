@@ -50,11 +50,12 @@ class EventForm(ModelForm):
 class VenueForm(ModelForm):
     class Meta:
         model = Venue
-        fields = ('name', 'address', 'phone')
+        fields = ('name', 'address', 'phone', 'venue_img')
         labels = {
             'name': "",
             'address': "",
             'phone': "",
+            'venue_img': "",
         }
 
         widgets = {

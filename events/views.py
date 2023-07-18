@@ -20,6 +20,30 @@ from reportlab.lib.pagesizes import letter
 # imports for pagination
 from django.core.paginator import Paginator
 
+# Create Admin Approval Page
+def admin_approval(request):
+    event_list = Events.objects.all().order_by('-event_date')
+    if request.user.is_superuser:
+        if request.method == "POST":
+            id_list = request.POST.getlist('boxes')
+            
+        #Uncheck all events
+            event_list.update(approved=False)
+        # Update the database
+            for x in id_list:
+                Events.objects.filter(pk=int(x)).update(approved=True)
+                
+            messages.success(request, ("Event List Approval Has Been Updated"))
+            return redirect('event_list')
+
+        return render(request, 'events/admin_approval.html', {'event_list': event_list})
+    else:
+        messages.success(request, ("You're not authorized to view this page"))
+        return redirect('home')
+    
+    return render(request, 'events/admin_approval.html', {})
+
+
 def my_events(request):
     if request.user.is_authenticated:
         events = Events.objects.filter(attendees=request.user.id)
@@ -161,7 +185,7 @@ def add_event(request):
 
 def update_venue(request, venue_id):
     venue = Venue.objects.get(pk=venue_id)
-    form = VenueForm(request.POST or None, instance=venue)
+    form = VenueForm(request.POST or None, request.FILES or None, instance=venue)
     if form.is_valid():
         form.save()
         return redirect('venue-list')
@@ -170,7 +194,7 @@ def update_venue(request, venue_id):
 def search_venues(request):
     if request.method == "POST":
         searched = request.POST['searched']
-        venues = Venue.objects.filter(description__contains=searched)
+        venues = Venue.objects.filter(name__contains=searched)
         return render(request, 'events/search_venues.html', {'searched': searched, 'venues': venues})
     else:
         return render(request, 'events/search_venues.html', {})
@@ -202,7 +226,7 @@ def all_venues(request):
 def add_venue(request):
     submitted = False
     if request.method == "POST":
-        form = VenueForm(request.POST)
+        form = VenueForm(request.POST, request.FILES)
         if form.is_valid():
             venue = form.save(commit=False)
             venue.owner = request.user.id  #logged in user
@@ -218,7 +242,7 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Events.objects.all().order_by('event_date')
+    event_list = Events.objects.all().order_by('-event_date')
     return render(request, 'events/events_list.html', {'event_list': event_list})
 
 def home(request, year=datetime.now().year, day=datetime.now().day, month=datetime.now().strftime("%B")):
@@ -227,11 +251,13 @@ def home(request, year=datetime.now().year, day=datetime.now().day, month=dateti
     month_num = int(month_num)
 
     cal = HTMLCalendar().formatmonth(year, month_num)
+    event_list = Events.objects.filter(event_date__year = year, event_date__month = month_num)
     return render(request, "events/home.html", {
         "age": 26,
         "day": day,
         "year": year,
         "month": month,
         "month_num": month_num,
-        "cal": cal
+        "cal": cal,
+        "event_list": event_list
     })
