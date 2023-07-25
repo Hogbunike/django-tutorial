@@ -9,9 +9,9 @@
 
     {% block content %}
 
-         <h1>Events</h1>
+         <h1> Show Events</h1>
             <br>
-    {% for event in event_list %}
+    
     {% if event.approved %}
     <div class="card">
        <div class="card-header">
@@ -50,7 +50,7 @@
       <br>
     {% endif %}
     {% endif %}
-    {% endfor %}
+    
 
     <nav aria-label="Page navigation example">
         <ul class="pagination">

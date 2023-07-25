@@ -20,8 +20,31 @@ from reportlab.lib.pagesizes import letter
 # imports for pagination
 from django.core.paginator import Paginator
 
+# show events 
+def show_event(request, event_id):
+    event = Events.objects.get(id=event_id)
+    return render(request, 'events/show_event.html', {'event': event})
+
+# show events in a venue
+def venue_event(request, venue_id):
+    venue = Venue.objects.get(id=venue_id)
+    events = venue.events_set.all()
+    if events:
+        return render(request, 'events/venue_event.html', {'events': events})
+    else:
+         messages.success(request, ("That Venue has no event at this time..."))
+         return redirect('admin_approval')
+
+
 # Create Admin Approval Page
 def admin_approval(request):
+    # Get Venues
+    venue_list = Venue.objects.all()
+    # Get Count
+    event_count = Events.objects.all().count()
+    venue_count = Venue.objects.all().count()
+    user_count = User.objects.all().count()
+
     event_list = Events.objects.all().order_by('-event_date')
     if request.user.is_superuser:
         if request.method == "POST":
@@ -35,15 +58,22 @@ def admin_approval(request):
                 
             messages.success(request, ("Event List Approval Has Been Updated"))
             return redirect('event_list')
-
-        return render(request, 'events/admin_approval.html', {'event_list': event_list})
+        else:
+            return render(request, 'events/admin_approval.html', {
+                'event_list': event_list,
+                'event_count': event_count,
+                'venue_count': venue_count,
+                'user_count': user_count,
+                'venue_list': venue_list,
+            })
     else:
         messages.success(request, ("You're not authorized to view this page"))
         return redirect('home')
     
-    return render(request, 'events/admin_approval.html', {})
+    # return render(request, 'events/admin_approval.html', {})
 
 
+# Create my events page
 def my_events(request):
     if request.user.is_authenticated:
         events = Events.objects.filter(attendees=request.user.id)
@@ -216,7 +246,7 @@ def all_venues(request):
     venues_list = Venue.objects.all()
     
     # set up pagination
-    p = Paginator(Venue.objects.all(), 2)
+    p = Paginator(Venue.objects.all(), 3)
     page = request.GET.get('page')
     venues = p.get_page(page)
     nums = 'a' * venues.paginator.num_pages
@@ -242,8 +272,14 @@ def add_venue(request):
 
 
 def all_events(request):
-    event_list = Events.objects.all().order_by('-event_date')
-    return render(request, 'events/events_list.html', {'event_list': event_list})
+    event_list = Events.objects.all()
+
+    p = Paginator(Events.objects.all(), 2)
+    page = request.GET.get('page')
+    events = p.get_page(page)
+    nums = 'a' * events.paginator.num_pages
+    # event_list = Events.objects.all().order_by('-event_date')
+    return render(request, 'events/events_list.html', {'event_list': event_list, 'events': events, 'nums': nums})
 
 def home(request, year=datetime.now().year, day=datetime.now().day, month=datetime.now().strftime("%B")):
     month = month.title()
